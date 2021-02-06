@@ -11,16 +11,6 @@
     <body>
       <?php require 'utils/toolbar.php'; ?>
         <div class="container">
-            <!-- <div class="row">
-                <div class="col-md-12">
-                    <?php //require 'utils/header.php'; ?>
-                </div>
-            </div> -->
-            <!-- <div class="row">
-                <div class="col-md-12">
-                    <?php //require 'utils/toolbar.php'; ?>
-                </div>
-            </div> -->
             <div class="row">
                 <div class="col-md-12">
                   <br>
