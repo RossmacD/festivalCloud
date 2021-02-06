@@ -1,4 +1,16 @@
-<?php define('BASE_URL', 'http://localhost/festivalCloud-scenario-1'); ?>
+<?php require_once __DIR__.'/../classes/Auth.php';
+use FestivalCloud\Auth;
+
+define('BASE_URL', 'http://localhost/festivalCloud-scenario-1');
+
+try {
+    $auth = new Auth();
+} catch (Exception $ex) {
+    exit($ex->getMessage());
+}
+?>
+
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
@@ -18,7 +30,11 @@
         echo '<a class="nav-link" href="'.BASE_URL.'/views/shows/index.php">Shows</a>';
         echo '<a class="nav-link" href="'.BASE_URL.'/views/performers/index.php">Performers</a>';
 
-        echo '<a class="nav-link" href="'.BASE_URL.'/views/profile/index.php">Profile</a>';
+        if ($auth->isAuthenticated()) {
+            echo '<a class="nav-link" href="'.BASE_URL.'/views/profile/index.php">Profile</a>';
+        } else {
+            echo '<a class="nav-link" href="https://ryangraves08-is-my-gmail-password.auth.us-east-1.amazoncognito.com/login?client_id=n2lj9229idf26f6k7sgfbbtoq&response_type=token&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=http://localhost/festivalCloud-scenario-1/secure_page.php">Login / Register</a>';
+        }
         ?>
       </div>
     </div>
