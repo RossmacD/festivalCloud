@@ -1,4 +1,7 @@
-<?php require_once __DIR__.'/../classes/Auth.php';
+<?php
+require_once __DIR__.'/../classes/Auth.php';
+
+require_once 'functions.php';
 use FestivalCloud\Auth;
 
 try {
@@ -20,8 +23,6 @@ try {
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <?php
-        require_once 'functions.php';
-
         echo '<a class="nav-link" href="'.BASE_URL.'/">Home</a>';
         echo '<a class="nav-link" href="'.BASE_URL.'/views/festivals/index.php">Festivals</a>';
         echo '<a class="nav-link" href="'.BASE_URL.'/views/stages/index.php">Stages</a>';
