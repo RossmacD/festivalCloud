@@ -1,8 +1,6 @@
 <?php require_once __DIR__.'/../classes/Auth.php';
 use FestivalCloud\Auth;
 
-define('BASE_URL', 'http://localhost/festivalCloud-scenario-1');
-
 try {
     $auth = new Auth();
 } catch (Exception $ex) {
