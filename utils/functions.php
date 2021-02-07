@@ -1,6 +1,7 @@
 <?php
 
-require 'vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
+use Aws\S3\S3Client;
 
 function is_logged_in()
 {
@@ -44,6 +45,29 @@ function dd($value)
     exit();
 }
 
+function buckets()
+{
+    // echo $_ENV['AWS_KEY'];
+
+    try {
+        $s3Client = new S3Client([
+            'region' => $_ENV['AWS_REGION'],
+            'version' => '2006-03-01',
+            // 'profile' => 'default',
+            'credentials' => [
+                'key' => $_ENV['AWS_KEY'],
+                'secret' => $_ENV['AWS_SECRET'],
+            ],
+        ]);
+        $buckets = $s3Client->listBuckets();
+        foreach ($buckets['Buckets'] as $bucket) {
+            echo $bucket['Name']."\n";
+        }
+    } catch (S3Exception $e) {
+        echo $e->getMessage()."\n";
+    }
+}
+
 function imageFileUpload($name, $required, $maxSize, $allowedTypes, $fileName)
 {
     if ('POST' !== $_SERVER['REQUEST_METHOD']) {
@@ -70,6 +94,15 @@ function imageFileUpload($name, $required, $maxSize, $allowedTypes, $fileName)
     if (false === $imageInfo) {
         throw new Exception('File is not an image.');
     }
+
+    $s3Client = new S3Client([
+        'region' => $_ENV['AWS_REGION'],
+        'version' => $_ENV['AWS_VERSION'],
+        'credentials' => [
+            'key' => $_ENV['AWS_KEY'],
+            'secret' => $_ENV['AWS_SECRET'],
+        ],
+    ]);
 
     $width = $imageInfo[0];
     $height = $imageInfo[1];

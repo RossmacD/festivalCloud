@@ -10,6 +10,9 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use Aws\CognitoIdentityProvider\CognitoIdentityProviderClient;
 
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'../');
+// $dotenv->load();
+
 class Auth
 {
     private $cookie_name;
