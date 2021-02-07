@@ -12,11 +12,11 @@ use Aws\CognitoIdentityProvider\CognitoIdentityProviderClient;
 
 class Auth
 {
-    private const COOKIE_NAME = 'festival-cloud-access-token';
-    private $region = 'us-east-1';
-    private $version = '2016-04-18';
-    private $key = 'ASIA32ONXAD2BDSL74MM';
-    private $secret = 'I0yKoLSISIXDudkVIUQMILvLt4Zzlsl4RlJ1VZ';
+    private $cookie_name;
+    private $region;
+    private $version;
+    private $key;
+    private $secret;
     //Authenticate with AWS Acess Key and Secret
     private $client;
 
@@ -26,6 +26,7 @@ class Auth
     {
         // Attempt to authenticate on creation based on authentication cookie
         try {
+            $this->loadEnv();
             $this->client = new CognitoIdentityProviderClient([
                 'version' => $this->version,
                 'region' => $this->region,
@@ -46,6 +47,7 @@ class Auth
     public function recieveAwsCallback(string $token): void
     {
         try {
+            $this->loadEnv();
             // Set the user to be the returned value from AWS
             $awsUser = $this->client->getUser([
                 'AccessToken' => $token,
@@ -66,9 +68,9 @@ class Auth
 
     public function logout(): void
     {
-        if (isset($_COOKIE[self::COOKIE_NAME])) {
-            unset($_COOKIE[self::COOKIE_NAME]);
-            setcookie(self::COOKIE_NAME, '', time() - 3600);
+        if (isset($_COOKIE[$this->cookie_name])) {
+            unset($_COOKIE[$this->cookie_name]);
+            setcookie($this->cookie_name, '', time() - 3600);
         }
     }
 
@@ -82,13 +84,22 @@ class Auth
         return $this->user;
     }
 
+    private function loadEnv()
+    {
+        $this->cookie_name = $_ENV['COOKIE_NAME'];
+        $this->region = $_ENV['AWS_REGION'];
+        $this->version = $_ENV['AWS_VERSION'];
+        $this->key = $_ENV['AWS_KEY'];
+        $this->secret = $_ENV['AWS_SECRET'];
+    }
+
     private function setAuthenticationCookie(string $accessToken): void
     {
-        setcookie(self::COOKIE_NAME, $accessToken, time() + 3600);
+        setcookie($this->cookie_name, $accessToken, time() + 3600);
     }
 
     private function getAuthenticationCookie(): string
     {
-        return $_COOKIE[self::COOKIE_NAME] ?? '';
+        return $_COOKIE[$this->cookie_name] ?? '';
     }
 }
