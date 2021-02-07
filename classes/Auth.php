@@ -82,22 +82,6 @@ class Auth
         return $this->user;
     }
 
-    // public function getEmail(): string
-    // {
-    //     if ($this->isAuthenticated()) {
-    //         foreach($this->user["UserAttributes"] as $key=>$val){
-
-    //         }
-    //         return '';
-    //     }
-
-    //     return '';
-    // }
-
-    // private function getAttribute(string $attribute){
-    //     return $this->user['Attributes'][$attribute]
-    // }
-
     private function setAuthenticationCookie(string $accessToken): void
     {
         setcookie(self::COOKIE_NAME, $accessToken, time() + 3600);

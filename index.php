@@ -1,4 +1,8 @@
-<?php define('APP_ROOT', __DIR__); ?>
+<?php require_once __DIR__.'/classes/Auth.php';
+
+use FestivalCloud\Auth;
+
+define('APP_ROOT', __DIR__); ?>
 
 <!DOCTYPE html>
 <html>
@@ -15,6 +19,14 @@
                 <div class="col-md-12">
                   <br>
                     <h2>Welcome to the Cloud Festivals Website</h2>
+                    <?php try {
+    $auth = new Auth();
+    if (!$auth->isAuthenticated()) {
+        echo '<p>You are viewing as a guest, login to view more</p>';
+    }
+} catch (Exception $ex) {
+    exit($ex->getMessage());
+}?>
                     <br>
                 </div>
             </div>
