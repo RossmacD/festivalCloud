@@ -1,5 +1,6 @@
 <?php
 require_once '../../classes/Performer.php';
+
 require_once '../../classes/Gump.php';
 
 try {
@@ -7,36 +8,34 @@ try {
 
     $_GET = $validator->sanitize($_GET);
 
-    $validation_rules = array(
-        'id' => 'required|integer|min_numeric,1'
-    );
-    $filter_rules = array(
-    	'id' => 'trim|sanitize_numbers'
-    );
+    $validation_rules = [
+        'id' => 'required|integer|min_numeric,1',
+    ];
+    $filter_rules = [
+        'id' => 'trim|sanitize_numbers',
+    ];
 
     $validator->validation_rules($validation_rules);
     $validator->filter_rules($filter_rules);
 
     $validated_data = $validator->run($_GET);
 
-    if($validated_data === false) {
+    if (false === $validated_data) {
         $errors = $validator->get_errors_array();
-        throw new Exception("Invalid performer id: " . $errors['id']);
+
+        throw new Exception('Invalid performer id: '.$errors['id']);
     }
 
     $id = $validated_data['id'];
     $performer = Performer::find($id);
-    
+
     $img_src = $performer->image_path;
-    
-    if(!strpos($img_src, 'placeimg')) {
-      $img_src = "../../" . $performer->image_path;
-    }
-    
-    
-}
-catch (Exception $ex) {
-    die($ex->getMessage());
+
+    // if(!strpos($img_src, 'placeimg')) {
+    //   $img_src = "../../" . $performer->image_path;
+    // }
+} catch (Exception $ex) {
+    exit($ex->getMessage());
 }
 ?>
 <!DOCTYPE html>
@@ -61,30 +60,30 @@ catch (Exception $ex) {
                     <table id="table-performer" class="table table-hover">
                         <tbody>
                             <tr>
-                                <td><img src="<?= $img_src ?>" height="200px" /></td>
+                                <td><img src="<?php echo $img_src; ?>" height="200px" /></td>
                             </tr>
                             <tr>
                                 <td width="20%">Title</td>
-                                <td><?= $performer->title ?></td>
+                                <td><?php echo $performer->title; ?></td>
                             </tr>
                             <tr>
                                 <td>Description</td>
-                                <td><?= $performer->description ?></td>
+                                <td><?php echo $performer->description; ?></td>
                             </tr>
                             <tr>
                                 <td>Email</td>
-                                <td><?= $performer->contact_email ?></td>
+                                <td><?php echo $performer->contact_email; ?></td>
                             </tr>
                             <tr>
                                 <td>Phone</td>
-                                <td><?= $performer->contact_phone ?></td>
+                                <td><?php echo $performer->contact_phone; ?></td>
                             </tr>
                         </tbody>
                     </table>
                     <p>
                         <a href="index.php" class="btn btn-default">Cancel</a>
-                        <a href="edit.php?id=<?= $performer->id ?>" class="btn btn-warning">Edit</a>
-                        <a href="delete.php?id=<?= $performer->id ?>" class="btn btn-danger">Delete</a>
+                        <a href="edit.php?id=<?php echo $performer->id; ?>" class="btn btn-warning">Edit</a>
+                        <a href="delete.php?id=<?php echo $performer->id; ?>" class="btn btn-danger">Delete</a>
                     </p>
                 </div>
             </div>

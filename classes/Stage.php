@@ -2,6 +2,9 @@
 
 require_once 'Connection.php';
 
+require_once 'StaticFile.php';
+use FestivalCloud\StaticFile;
+
 class Stage
 {
     public $id;
@@ -107,6 +110,12 @@ class Stage
             throw new Exception('Failed to retrieve stage');
         }
 
-        return $stmt->fetchObject('Stage');
+        $stage = $stmt->fetchObject('Stage');
+        if (!strpos($stage->image_path, 'placeimg')) {
+            $files = new StaticFile();
+            $stage->image_path = $files->getFileLink($stage->image_path);
+        }
+
+        return $stage;
     }
 }

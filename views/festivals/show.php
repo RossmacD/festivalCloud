@@ -30,10 +30,6 @@ try {
     $festival = Festival::find($id);
 
     $img_src = $festival->image_path;
-
-    // if(!strpos($img_src, 'placeimg')) {
-    //   $img_src = "../../" . $festival->image_path;
-    // }
 } catch (Exception $ex) {
     exit($ex->getMessage());
 }
