@@ -1,0 +1,1 @@
+aws elasticbeanstalk update-environment --environment-name Festivalcloudbeanstalk-env --option-settings file://options.json
