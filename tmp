@@ -1,1 +1,5 @@
 aws elasticbeanstalk update-environment --environment-name Festivalcloudbeanstalk-env --option-settings file://options.json
+
+
+
+aws iam upload-server-certificate --server-certificate-name SignedCertBeanstalk --certificate-body file://cert.pem --certificate-chain file://fullchain.pem --private-key file://privkey.pem
