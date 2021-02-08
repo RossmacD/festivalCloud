@@ -47,22 +47,28 @@ function dd($value)
 
 function buckets()
 {
-    // echo $_ENV['AWS_KEY'];
-
     try {
         $s3Client = new S3Client([
             'region' => $_ENV['AWS_REGION'],
-            'version' => '2006-03-01',
+            'version' => 'latest',
             // 'profile' => 'default',
             'credentials' => [
-                'key' => $_ENV['AWS_KEY'],
-                'secret' => $_ENV['AWS_SECRET'],
+                'key' => $_ENV['AWS_KEY_S3'],
+                'secret' => $_ENV['AWS_SECRET_S3'],
+                'token' => $_ENV['AWS_SESSION_S3'],
             ],
         ]);
-        $buckets = $s3Client->listBuckets();
-        foreach ($buckets['Buckets'] as $bucket) {
-            echo $bucket['Name']."\n";
-        }
+        $command = $s3Client->getCommand('GetObject', [
+            'Bucket' => $_ENV['S3_BUCKET'],
+            'Key' => 'uploads/1610928727.png',
+        ]);
+
+        $request = $s3Client->createPresignedRequest($command, '+40 minutes');
+        echo '<a href="'.$request->getUri().'">Image</a>';
+        // $buckets = $s3Client->listBuckets();
+        // foreach ($buckets['Buckets'] as $bucket) {
+        //     echo $bucket['Name']."\n";
+        // }
     } catch (S3Exception $e) {
         echo $e->getMessage()."\n";
     }
@@ -95,14 +101,14 @@ function imageFileUpload($name, $required, $maxSize, $allowedTypes, $fileName)
         throw new Exception('File is not an image.');
     }
 
-    $s3Client = new S3Client([
-        'region' => $_ENV['AWS_REGION'],
-        'version' => $_ENV['AWS_VERSION'],
-        'credentials' => [
-            'key' => $_ENV['AWS_KEY'],
-            'secret' => $_ENV['AWS_SECRET'],
-        ],
-    ]);
+    // $s3Client = new S3Client([
+    //     'region' => $_ENV['AWS_REGION'],
+    //     'version' => $_ENV['AWS_VERSION'],
+    //     'credentials' => [
+    //         'key' => $_ENV['AWS_KEY'],
+    //         'secret' => $_ENV['AWS_SECRET'],
+    //     ],
+    // ]);
 
     $width = $imageInfo[0];
     $height = $imageInfo[1];
