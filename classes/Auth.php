@@ -59,7 +59,7 @@ class Auth
 
             $this->setAuthenticationCookie($token); ?>
                 <script>
-                    window.location.href = 'http://localhost/festivalCloud-scenario-1/views/profile/index.php';
+                    window.location.href = 'https://festivalcloud.rossmacd.com/views/profile/index.php';
                 </script>
                 <?php
         } catch (\Aws\CognitoIdentityProvider\Exception\CognitoIdentityProviderException $e) {
