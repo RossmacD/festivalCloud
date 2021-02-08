@@ -8,6 +8,7 @@ require_once 'User.php';
 
 require_once __DIR__.'/../vendor/autoload.php';
 use Aws\S3\S3Client;
+use Dotenv;
 
 class StaticFile
 {
@@ -15,6 +16,8 @@ class StaticFile
 
     public function __construct()
     {
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/..');
+        $dotenv->load();
         $this->client = new S3Client([
             'region' => $_ENV['AWS_REGION'],
             'version' => 'latest',

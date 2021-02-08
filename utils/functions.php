@@ -3,6 +3,9 @@
 require_once __DIR__.'/../vendor/autoload.php';
 use Aws\S3\S3Client;
 
+require_once __DIR__.'/../classes/StaticFile.php';
+use FestivalCloud\StaticFile;
+
 function is_logged_in()
 {
     start_session();
@@ -60,7 +63,7 @@ function buckets()
         ]);
         $command = $s3Client->getCommand('GetObject', [
             'Bucket' => $_ENV['S3_BUCKET'],
-            'Key' => 'uploads/1610928727.png',
+            'Key' => 'uploads/1612798159.jpg',
         ]);
 
         $request = $s3Client->createPresignedRequest($command, '+40 minutes');
@@ -101,15 +104,6 @@ function imageFileUpload($name, $required, $maxSize, $allowedTypes, $fileName)
         throw new Exception('File is not an image.');
     }
 
-    // $s3Client = new S3Client([
-    //     'region' => $_ENV['AWS_REGION'],
-    //     'version' => $_ENV['AWS_VERSION'],
-    //     'credentials' => [
-    //         'key' => $_ENV['AWS_KEY'],
-    //         'secret' => $_ENV['AWS_SECRET'],
-    //     ],
-    // ]);
-
     $width = $imageInfo[0];
     $height = $imageInfo[1];
     $sizeString = $imageInfo[3];
@@ -135,8 +129,15 @@ function imageFileUpload($name, $required, $maxSize, $allowedTypes, $fileName)
         throw new Exception('Sorry, only '.implode(',', $allowedTypes).' files are allowed.');
     }
 
-    if (!move_uploaded_file($_FILES[$name]['tmp_name'], $target_file)) {
-        throw new Exception('Sorry, there was an error moving your uploaded file.');
+    // if (!move_uploaded_file($_FILES[$name]['tmp_name'], $target_file)) {
+    //     throw new Exception('Sorry, there was an error moving your uploaded file.');
+    // }
+
+    try {
+        $files = new StaticFile();
+        $upload = $files->uploadFile('uploads/'.$fileName.'.'.$imageFileType, $_FILES[$name]['tmp_name']);
+    } catch (\Exception  $e) {
+        echo 'FAILED TO UPLOAD TO S3 '.$e->getMessage();
     }
 
     return 'uploads/'.$fileName.'.'.$imageFileType;

@@ -1,5 +1,7 @@
 <?php
-require_once '/vendor/autoload.php';
+require_once 'vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 require_once 'classes/Auth.php';
 use FestivalCloud\Auth;
