@@ -24,7 +24,6 @@ require_once __DIR__.'/utils/functions.php'; ?>
                   <br>
                     <h2>Welcome to the Cloud Festivals Website</h2>
                     <?php try {
-    buckets();
     $auth = new Auth();
     if (!$auth->isAuthenticated()) {
         echo '<p>You are viewing as a guest, login to view more</p>';

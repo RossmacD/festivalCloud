@@ -3,3 +3,7 @@ aws elasticbeanstalk update-environment --environment-name Festivalcloudbeanstal
 
 
 aws iam upload-server-certificate --server-certificate-name SignedCertBeanstalk --certificate-body file://cert.pem --certificate-chain file://fullchain.pem --private-key file://privkey.pem
+
+
+
+Bug: Festivals when logged out -> should check if authenticated before running requests
